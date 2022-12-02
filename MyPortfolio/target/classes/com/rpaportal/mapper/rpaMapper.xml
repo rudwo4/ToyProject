@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rpaportal.mapper.rpaMapper">
+	<!-- check and delete -->
+	<insert id = "enroll">
+		insert into ${tableType}(title,content,writer) values(#{title},#{content},#{writer})
+	</insert>
+	
+	<select id="getList" resultType="com.rpaportal.model.BoardVO">
+		<![CDATA[
+		select list.* 
+		from (select @rownum:=@rownum+1 as rownum,a.* from rpa_portal.board a,(select @rownum:=0)R
+		order by bno desc
+		)list
+		where rownum >=#{startPage} and rownum<=#{endPage}
+		]]>
+	</select>
+	
+	<select id ="getPage" resultType="com.rpaportal.model.BoardVO">
+		select * from board where bno = #{bno}
+	</select>
+	
+	<update id ="updatePage">
+		update board set title = #{title}, content = #{content}, up_date= now() where bno = #{bno}
+	</update>
+	
+	<delete id="deletePage">
+		delete from board where bno = #{bno}
+	</delete>
+	
+	<select id="getTotal" resultType = "int">
+		select count(*) from board
+	</select>
+	<!-- check and delete -->
+	
+	<!-- User -->
+	<select id="loginChk" resultType = "int">
+		select count(*) from user where id =#{id} and password =#{pwd}
+	</select>
+	
+	<insert id="signUp" parameterType="com.rpaportal.model.UserVO">
+		insert into user(id,password,username,email,phoneNumber,birth,reg_date) values(#{id},#{password},#{username},#{email},#{phoneNumber},#{birth},now())
+	</insert>
+	
+	<select id="confirmId" resultType="int">
+		select count(*) from user where id = #{id}
+	</select>
+	
+	<select id="findPw" parameterType="com.rpaportal.model.UserVO" resultType ="int">
+		select count(*) from user where phoneNumber=#{phoneNumber} and email=#{email} and id=#{id}
+	</select>
+	
+	<select id="updatePw" parameterType="com.rpaportal.model.UserVO">
+		update user set password=#{password} where id=#{id} 
+		<if test="phoneNumber!=null">
+			and phoneNumber=#{phoneNumber} and email=#{email}
+		</if>
+	</select>
+	
+	<select id="userInfo" resultType="com.rpaportal.model.UserVO">
+		select * from user where id=#{id}
+	</select>
+	
+	<select id="pwCheck" resultType="int">
+		select count(*) from user where id=#{id} and password=#{recentPw}
+	</select>
+	
+	<select id ="eduList" resultType="com.rpaportal.model.BoardVO"> 
+		select * from myEduList where studentId = #{loginId}
+	</select>
+	
+	<select id ="qnaList" resultType="com.rpaportal.model.BoardVO"> 
+		select * from qna a
+		left join(select b.bno,count(b.bno) reply_cnt from qna a right join qnareply b on a.bno = b.bno group by b.bno) b
+		on a.bno= b.bno
+		WHERE date_ADD(a.reg_date,INTERVAL 6 month) > now() 
+		and a.writer = #{loginId};
+	</select>
+	<!-- User -->
+	
+	<!-- board - community/study/task/Q&A  -->
+	<insert id = "boardEnroll" parameterType="com.rpaportal.model.BoardVO">
+		insert into ${tableType}(title,content,writer
+		<if test="tableType=='edu'">
+			,eduStartDate,eduEndDate,regStartDate,regEndDate
+		</if>
+		) 
+		values(#{title},#{content},#{writer}
+		<if test="tableType=='edu'">
+			,#{eduStartDate},#{eduEndDate},#{regStartDate},#{regEndDate}
+		</if>
+		)
+	</insert>
+	
+	<select id="boardGetList" resultType="com.rpaportal.model.BoardVO">
+		select * 
+		from (select @rownum:=@rownum+1 as rownum,a.* from ${tableName} a,(select @rownum:=0)R
+		where a.bno != 0
+		<if test="keyword != null">
+			and title like concat('%',#{keyword},'%')
+		</if>
+		<if test="startDate != null and tableName=='edu'">
+			<![CDATA[
+			and str_to_date(a.eduStartDate,'%Y-%m-%d') >= #{startDate}
+			and str_to_date(a.eduEndDate,'%Y-%m-%d') <= #{endDate}
+			]]>
+		</if>
+		<if test="startDate != null and tableName!='edu'">
+			and str_to_date(reg_date,'%Y-%m-%d') between #{startDate} and #{endDate}
+		</if>
+		<if test="category != null">
+			and title like concat('%',#{category},'%')
+		</if>
+		<![CDATA[
+		order by bno desc)list
+		]]>
+		<if test="tableName=='qna'">
+			left join(select b.bno,count(b.bno) reply_cnt from qna a right join qnareply b on a.bno = b.bno group by b.bno) b
+			on list.bno= b.bno
+		</if>
+		<![CDATA[
+		where rownum >=#{startPage} and rownum<=#{endPage}
+		]]>
+	</select>
+	
+	<select id ="boardGetPage" resultType="com.rpaportal.model.BoardVO" parameterType="com.rpaportal.model.BoardVO">
+		select * from ${tableType} where bno = #{bno}
+	</select>
+	
+	<update id ="boardUpdatePage">
+		update ${tableType} set title = #{title}, content = #{content}, up_date= now() 
+		<if test='tableType.equals("worklist")'>
+			, status = #{status}
+		</if>
+		<if test='tableType=="edu"'>
+			,regStartDate=#{regStartDate}, regEndDate=#{regEndDate}, eduStartDate=#{eduStartDate}, eduEndDate=#{eduEndDate}
+		</if>
+		where bno = #{bno}
+	</update>
+	
+	<delete id="boardDeletePage">
+		delete from ${tableType} where bno = #{bno}
+	</delete>
+	
+	<select id="boardGetTotal" resultType = "int">
+		select count(*) from ${tableName} where bno != 0 
+		<if test="keyword != null">
+			and title like concat('%',#{keyword},'%')
+		</if>
+		<if test="startDate != null">
+			and str_to_date(reg_date,'%Y-%m-%d') between #{startDate} and #{endDate}
+		</if>
+		<!-- 
+		<if test="category != null">
+		</if>
+		 -->
+	</select>
+	
+	<update id="countView" >
+		update ${tableType} set view_cnt = view_cnt + 1 where bno = #{bno} 
+	</update>
+	<!-- board  -->
+	<!-- edu info  -->
+	<insert id="registeToEdu" parameterType="hashMap">
+		insert into eduList(eduCode,eduSubject,eduMaster,studentId,studentName) 
+		values(#{code},#{title},#{eduMaster},#{loginId},#{username})
+	</insert>
+	
+	<select id="eduDuplicateChk" resultType="int">
+		select count(*) from eduList where eduCode = #{code} and studentId = #{loginId} 
+	</select>
+	
+	<delete id="eduCancel">
+		delete from eduList where eduCode = #{code} and studentId = #{loginId}
+	</delete>
+	<!-- edu info  -->
+	
+	<!-- Qna -->
+	<select id="veiwReply" resultType="com.rpaportal.model.replyVO">
+		select * from qnareply where bno=#{bno} order by reg_date desc
+	</select>
+	
+	<insert id="saveReply">
+		insert into qnareply(bno,writer,content) values(#{bno},#{writer},#{reply})
+	</insert>
+	
+	<delete id="deleteReply">
+		delete from qnareply where bno=#{bno} and writer=#{writer} and replybno=#{replybno}
+	</delete>
+	<!-- Qna -->
+	
+	<!-- admin -->
+	<select id="getCheckList" resultType="com.rpaportal.model.BoardVO">
+		select * 
+		from (select @rownum:=@rownum+1 as rownum,a.* from worklist a,(select @rownum:=0)R
+		where a.status = 'test'
+		order by bno desc)list
+	</select>
+	<!-- admin -->
+</mapper>
