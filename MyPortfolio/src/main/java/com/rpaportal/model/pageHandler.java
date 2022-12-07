@@ -2,7 +2,7 @@ package com.rpaportal.model;
 
 public class pageHandler {
 	
-	final int pageSize =5;
+	int pageSize =5;
 	final int NAV_SZIE = 10;
 	private int pageNum;
 	private int startPage;
@@ -93,6 +93,10 @@ public class pageHandler {
 
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
 	
 }

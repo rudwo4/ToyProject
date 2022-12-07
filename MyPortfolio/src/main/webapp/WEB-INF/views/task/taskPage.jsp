@@ -21,7 +21,7 @@
 							<c:choose>
 								<c:when test="${pageInfo.status eq 'register'}"><span class="badge bg-success" style="color:white">Register</span></c:when>
 								<c:when test="${pageInfo.status eq 'develop'}"><span class="badge bg-info" style="color:white">Develop</span></c:when>
-								<c:when test="${pageInfo.status eq 'test'}"><span class="badge bg-warning" style="color:white">Test</span></c:when>
+								<c:when test="${pageInfo.status eq 'test'}"><span class="badge bg-danger" style="color:white">Test</span></c:when>
 								<c:when test="${pageInfo.status eq 'golive'}"><span class="badge bg-primary" style="color:white">Go-Live</span></c:when>
 							</c:choose>
 						</div>		

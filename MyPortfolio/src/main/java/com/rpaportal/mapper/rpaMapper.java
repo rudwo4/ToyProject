@@ -17,7 +17,7 @@ public interface rpaMapper {
 	public int updatePage(BoardVO board);
 	public int deletePage(int bno);
 	public int paging();
-	public int getTotal();
+	public int getTotal(pageHandler ph);
 
 	//user
 	public int loginChk(String id,String pwd);
@@ -55,5 +55,9 @@ public interface rpaMapper {
 	public int deleteReply(String bno,String replybno, String writer);
 	
 	//admin
-	public List<BoardVO> getCheckList();
+	public List<BoardVO> getCheckList(pageHandler ph);
+	public List<UserVO> getUserList(pageHandler ph);
+	public int userDelete(String id);
+	public int workReusltUpdate(String bno,String status);
+	public int answerChk(String bno);
 }

@@ -61,6 +61,7 @@
 					$('#status').val('test').prop("selected",true);
 				}else if(status == 'golive'){
 					$('#status').val('golive').prop("selected",true);
+					$('#status').attr("disabled",true);
 				}
 		});
 </script>

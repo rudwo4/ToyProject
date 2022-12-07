@@ -42,8 +42,8 @@
 						<th width="10%">Number</th>
 						<th width="50%">Subject</th>
 						<th width="10%">Writer</th>
+						<th width="15%">Q&A Answer</th>
 						<th width="15%">register Date</th>
-						<th width="15%">update Date</th>
 					</tr>
 				</thead>
 				
@@ -64,8 +64,11 @@
 						</span>
 					</td>
 					<td><c:out value="${list.writer}"/></td>
+					<td>
+						<c:if test="${list.status=='N'}"><span class="btn btn-light">답변 대기</span></c:if>
+						<c:if test="${list.status=='Y'}"><span class="btn btn-secondary">답변 완료</span></c:if>
+					</td>
 					<td><fmt:formatDate pattern = "yyyy/MM/dd" value="${list.reg_date}"/></td>
-					<td><fmt:formatDate pattern = "yyyy/MM/dd" value="${list.up_date}"/></td>
 				</tr>
 			</c:forEach>
 			 

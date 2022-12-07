@@ -383,7 +383,7 @@ ul.btn li:last-child {
 .banner_main {
      background: url(../images/banner.jpg);
      background-repeat: no-repeat;
-     min-height: 300px;
+     min-height: 400px;
      background-size: 100% 100%;
      display: flex;
      justify-content: center;
@@ -554,14 +554,14 @@ ul.btn li:last-child {
 /** three_box section **/
 
 .three_box {
-     padding: 0 40px;
+     padding: 20px 40px;
 }
 
 .box_text {
      background: #fff;
-     padding: 50px 20px 20px 20px;
-     margin-top: -80px;
-     box-shadow: #ddd 0px 0px 14px -6px;
+     padding: 20px 20px 20px 20px;
+     margin-top: 0px;
+     box-shadow: #161414 0px 0px 14px -6px;
 }
 
 .box_text h3 {
@@ -632,7 +632,7 @@ ul.btn li:last-child {
 /** wedo  section **/
 
 .wedo {
-     padding-top: 70px;
+     padding-top: 0px;
 }
 
 .wedo .titlepage p {
@@ -649,7 +649,8 @@ ul.btn li:last-child {
 }
 
 .work figure img {
-     width: 100%;
+     width: 75%;
+	 filter:brightness(50%);
 }
 
 .work_text {

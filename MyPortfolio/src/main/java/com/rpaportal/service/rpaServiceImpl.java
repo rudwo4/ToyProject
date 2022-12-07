@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import com.rpaportal.mapper.rpaMapper;
 import com.rpaportal.model.BoardVO;
 import com.rpaportal.model.UserVO;
-import com.rpaportal.model.pageHandler;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;

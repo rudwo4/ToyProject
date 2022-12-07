@@ -17,7 +17,10 @@
 					<p class="text-primary" style="font-size:30px">${pageInfo.title}</p>
 					<br>
 					<div class="row">
-						<div class="col-md-6" style="font-size:20px">등록자 : ${pageInfo.writer}	|	등록일시 : <fmt:formatDate pattern = "yyyy/MM/dd" value="${pageInfo.reg_date}"/></div>
+						<div class="col-md-6" style="font-size:20px">등록자 : ${pageInfo.writer}	|	등록일시 : <fmt:formatDate pattern = "yyyy/MM/dd" value="${pageInfo.reg_date}"/>	|	
+							<c:if test="${pageInfo.status=='N'}"><span class="btn btn-light">답변 대기</span></c:if>
+							<c:if test="${pageInfo.status=='Y'}"><span class="btn btn-secondary">답변 완료</span></c:if>
+						</div>
 						<div class="col-md-6">
 						<div align = "right">
 							<c:if test="${pageInfo.writer==loginId}">

@@ -74,6 +74,7 @@ public class userController {
 		session = req.getSession();
 		
 		session.setMaxInactiveInterval(60*60*12);
+		//session.setMaxInactiveInterval(1*10);
 		session.setAttribute("id", id);
 		session.setAttribute("auth", auth);
 		

@@ -111,16 +111,15 @@ function logoutChk(){
 		window.location.href="${loginOutLink}"
 	}
 }
-
 function loginChk(){
 	let result = '<c:out value="${loginOutLink}"/>';
-	
 	if(result=="/user/login"){
 		alert("Login Please!!!");
 		window.location.href="/user/login"
 		return false;
 	}
 }
+
 </script>
 </body>
 </html>

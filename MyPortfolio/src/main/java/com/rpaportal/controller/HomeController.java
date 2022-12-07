@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +27,8 @@ public class HomeController {
 	
 	@Autowired
 	private communityService service;
+	@Autowired
+	private qnaService fservice;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model, pageHandler ph, HttpServletRequest req) {
@@ -40,8 +41,8 @@ public class HomeController {
 		ph.setTableName("community");
 		model.addAttribute("list",service.getList(ph,req));
 		
-		ph.setTableName("faq");
-		model.addAttribute("faqlist",service.getList(ph,req));
+		ph.setTableName("qna");
+		model.addAttribute("faqlist",fservice.getList(ph,req));
 		return "common/portalMain"; 
 	}
 	@GetMapping("/all")

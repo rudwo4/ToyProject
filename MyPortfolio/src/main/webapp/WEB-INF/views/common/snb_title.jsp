@@ -130,18 +130,23 @@ body{
 			<c:if test="${title==6}">	
 				<h2>관리자 페이지</h2>
 					<ul>
-						<li><a href="/admin/adminMain" class="list-group-item list-group-item-action">admin main</a></li>
 						<li><a href="/admin/adminTask" class="list-group-item list-group-item-action">과제 진행 확인</a></li>
 						<li><a href="/admin/adminQnA" class="list-group-item list-group-item-action">문의 사항 확인</a></li>
-						<li><a href="/admin/adminUserManage" class="list-group-item list-group-item-action">회원 정보 관리</a></li>
+						<li><a href="/admin/userManage" class="list-group-item list-group-item-action">회원 정보 관리</a></li>
 					</ul>
 			</c:if>			
 		</nav>
 	</aside>
 </body>
 <script type="text/javascript">
-function error(){
-	alert("This page is not ready");
-}
+$(document).ready(function(){
+	var session = '<c:out value="${loginId}"/>';
+	
+	if(session==''||session==null){
+		alert("세션이 만료되었습니다.");
+		window.location.href="/user/login"
+		return false;
+	}
+});
 </script>
 </html>

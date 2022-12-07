@@ -30,7 +30,25 @@
 	</delete>
 	
 	<select id="getTotal" resultType = "int">
-		select count(*) from board
+		select count(*) from ${tableName} u
+		<if test="tableName=='user'">
+			left join (select writer,count(writer) as boardCount from worklist group by writer) w
+			on u.id = w.writer
+			left join (select writer,count(writer) as boardCount from qna group by writer) q
+			on u.id = q.writer
+			left join (select writer,count(writer) as replyCnt from qnareply group by writer) r
+			on u.id = r.writer
+			where u.role!="0"
+		</if>
+		<if test="tableName=='worklist'">
+			where u.status='test'
+		</if>
+		<if test="keyword != null">
+			and u.username like concat('%',#{keyword},'%') or u.id like concat('%',#{keyword},'%')
+		</if>
+		<if test="startDate != null">
+			and str_to_date(u.reg_date,'%Y-%m-%d') between #{startDate} and #{endDate}
+		</if>
 	</select>
 	<!-- check and delete -->
 	
@@ -193,9 +211,49 @@
 	<!-- admin -->
 	<select id="getCheckList" resultType="com.rpaportal.model.BoardVO">
 		select * 
-		from (select @rownum:=@rownum+1 as rownum,a.* from worklist a,(select @rownum:=0)R
-		where a.status = 'test'
+		from (select @rownum:=@rownum+1 as rownum,a.* from ${tableName} a,(select @rownum:=0)R
+		where a.status = 'test' or a.status="N"
 		order by bno desc)list
+		<if test="tableName=='qna'">
+			left join(select b.bno,count(b.bno) reply_cnt from qna a right join qnareply b on a.bno = b.bno group by b.bno) b
+			on list.bno= b.bno
+		</if>
 	</select>
+	
+	<select id="getUserList" resultType="com.rpaportal.model.UserVO">
+		select u.username,u.id,u.role,u.reg_date,
+				(IFNULL(w.boardCount,0)+IFNULL(q.boardCount,0)) as boardCnt,
+		        IFNULL(r.replyCnt,0) as replyCnt
+		from user u 
+		left join (select writer,count(writer) as boardCount from worklist group by writer) w
+		on u.id = w.writer
+		left join (select writer,count(writer) as boardCount from qna group by writer) q
+		on u.id = q.writer
+		left join (select writer,count(writer) as replyCnt from qnareply group by writer) r
+		on u.id = r.writer
+		where u.role!="0"
+		<if test="StartDate!=null">
+			<![CDATA[
+			and str_to_date(u.reg_date,'%Y-%m-%d') >= #{startDate}
+			and str_to_date(u.reg_date,'%Y-%m-%d') <= #{endDate} 
+			]]>
+		</if>
+		<if test="keyword!=null">
+			and u.username like concat('%',#{keyword},'%') or u.id like concat('%',#{keyword},'%')
+		</if>
+		limit #{startPage},#{endPage}
+	</select>
+	
+	<delete id="userDelete">
+		delete from user where id = #{id}
+	</delete>
+	
+	<update id="workReusltUpdate">
+		update worklist set status=#{status} where bno=#{bno}  
+	</update>
+	
+	<update id="answerChk">
+		update qna set status="Y" where bno = #{bno}
+	</update>
 	<!-- admin -->
 </mapper>

@@ -12,6 +12,8 @@ public class UserVO {
 	private Date reg_date;
 	private Date modified_date;
 	private String role;
+	private int boardCnt;
+	private int replyCnt;
 	
 	public String getId() {
 		return id;
@@ -72,6 +74,18 @@ public class UserVO {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	public int getBoardCnt() {
+		return boardCnt;
+	}
+	public void setBoardCnt(int boardCnt) {
+		this.boardCnt = boardCnt;
+	}
+	public int getReplyCnt() {
+		return replyCnt;
+	}
+	public void setReplyCnt(int replyCnt) {
+		this.replyCnt = replyCnt;
 	}
 	
 }

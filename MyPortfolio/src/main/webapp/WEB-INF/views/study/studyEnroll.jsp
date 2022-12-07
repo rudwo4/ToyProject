@@ -16,6 +16,7 @@
 			      	<input class="form-control form-control-lg" type="text" name = "title" value ='<c:out value="${pageInfo.title}"/>'>
 		      		</div>	  
 					<div class="row">
+						<input type="hidden" name="writer" value="${loginId}">
 						<div class="col-md-6" style="font-size:15px">등록자 : ${loginId}
 							<c:if test='${tbn=="edu"}'>
 									|	
@@ -27,7 +28,7 @@
 						</div>
 						<div class="col-md-6">
 						<div align = "right">
-							<button type ="button" class="btn btn-primary disabled">Submit</button>
+							<button type ="submit" class="btn btn-primary disabled">Submit</button>
 							<button type ="button" class="btn btn-dark disabled" onclick="history.back()">Cancel</button>
 						</div>
 					</div>

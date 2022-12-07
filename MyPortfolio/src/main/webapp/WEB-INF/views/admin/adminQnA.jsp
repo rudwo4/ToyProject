@@ -10,31 +10,46 @@
       <%@ include file="../common/snb_title.jsp" %>
       	<article>
       		<figure>
-			    <h1>과제 진행 확인</h1>
-			    > RPA 회원 정보 테스트 요청중 인 현업 과제 확인해보세요
+			    <h1>문의 사항 확인</h1>
+			    > RPA 문의 사항을 확인해보세요
 			</figure>
-      		<div>테스트 요청중 과제</div> <div><b>Total</b><span class="text-danger">	<b>${total}</b></span></div>
+      		<div>테스트 요청중 과제 <b>Total</b><span class="text-danger">	<b>${total}</b></span></div>
       		<table class="table table-hover">
 				<thead>
-					<tr class="table-primary">
-						<th width="5%">Number</th>
-						<th width="30%">Subject</th>
+					<tr class="table-secondary">
+						<th width="10%">Number</th>
+						<th width="45%">Subject</th>
 						<th width="10%">Status</th>
 						<th width="10%">Writer</th>
-						<th width="15%">register Date</th>
-						<th width="30%">Go-Live Check</th>
+						<th width="10%">register Date</th>
+						<th width="15%">Q&A Answer Check</th>
 					</tr>
 				</thead>	
 				<c:forEach items="${list}" var="list">
 					<tr>
 						<td>${list.rownum}<!--<c:out value="${list.rownum}"/>--></td>
-						<td id="title"><span class="hit"><a href= '/task/taskPage?bno=<c:out value="${list.bno}"/>&tbn=worklist'><c:out value="${list.title}"/></a></span></td>
-						<td>${list.status}</td>
+						<td id="title">
+						<span class="hit">
+							<a href= '/qna/qnaPage?bno=<c:out value="${list.bno}"/>&tbn=${map.ph.tableName}'><c:out value="${list.title}"/>	
+								<c:if test="${list.reply_cnt!=0}">
+								<span class="badge bg-primary rounded-pill">
+									<span style="color:white">
+									&nbsp;${list.reply_cnt}
+									</span>
+								</span>
+								</c:if>
+							</a>
+						</span>
+						</td>
+						<td>
+							<c:if test="${list.status=='N'}">
+								<span class="btn btn-secondary disabled">답변 대기</span>
+							</c:if>
+						</td>
 						<td><c:out value="${list.writer}"/></td>
 						<td><fmt:formatDate pattern = "yyyy/MM/dd" value="${list.reg_date}"/></td>
 						<td>
-							<button onclick="golivechk('complete',${list.bno},'${list.writer}','${list.title}')" class="btn btn-primary" >테스트 완료</button> |
-							<button onclick="golivechk('fail',${list.bno},'${list.writer}','${list.title}')"class="btn btn-danger">추가 개발 필요</button>
+							<button onclick="answerChk('${list.bno}')" class="btn btn-primary" >답변 완료</button>
 						</td>
 					</tr>
 				</c:forEach>
@@ -67,12 +82,12 @@
       <!-- end footer -->
    </body>
 <script type="text/javascript">
-	function golivechk(result,bno,writer,title){
+	function answerChk(bno){
 		
 		var check = confirm("Is this your Decision?");
 		
 		if(check){
-			window.location.href="/admin/golivechk?result="+result+"&bno="+bno+"&writer="+writer+"&title="+title;	
+			window.location.href="/admin/answerChk?bno="+bno;	
 		}
 	}
 </script>   

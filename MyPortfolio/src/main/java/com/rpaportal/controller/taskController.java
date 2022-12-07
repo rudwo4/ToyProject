@@ -73,7 +73,6 @@ public class taskController {
 		String loginId = (String)req.getSession().getAttribute("id");
 		
 		userInfo=taskservice.userInfo(loginId);
-		System.out.println(userInfo);
 		model.addAttribute("userInfo",userInfo);
 		log.info("/GET : taskEnroll");
 	}

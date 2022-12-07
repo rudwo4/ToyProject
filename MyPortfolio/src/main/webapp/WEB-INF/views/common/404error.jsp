@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="EUC-KR">
-<title>Insert title here</title>
+<title>404page</title>
 </head>
 <body>
-404page
+<img style="width:800px;height:600px;"  alt="404page" src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg?w=2000">
 </body>
 </html>
